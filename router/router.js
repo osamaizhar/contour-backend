@@ -1,5 +1,8 @@
-const router = require('express').Router();
+const { saveUserExercise } = require("../controllers/user");
 
+const router = require("express").Router();
 
-
-module.exports = router
+// router.get('/save-excercise', saveUserExercise);
+router.post("/save-excercise", saveUserExercise);
+//
+module.exports = router;
