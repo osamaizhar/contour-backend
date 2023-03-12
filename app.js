@@ -3,14 +3,21 @@ const express = require("express");
 const connecttodb = require("./config/db");
 const bodyParser = require("body-parser");
 const router = require("./router/router");
-const app = express();
 const cors = require("cors");
-app.use(bodyParser.json());
-app.use("/user/", router);
-var corsOptions = {
-    origin: '*'
+var whitelist = ['http://localhost:3000']
+var corsOptionsDelegate = function (req, callback) {
+  var corsOptions;
+  if (whitelist.indexOf(req.header('Origin')) !== -1) {
+    corsOptions = { origin: true }
+  } else {
+    corsOptions = { origin: false }
+  }
+  callback(null, corsOptions) 
 }
-app.use(cors(corsOptions));
+const app = express();
+app.use(bodyParser.json());
+app.use(cors(corsOptionsDelegate))
+app.use("/user/", router);
 
 
 const PORT = process.env.PORT || 5000;
